@@ -1,0 +1,15 @@
+- name: start an instance with a public IP address
+  amazon.aws.ec2_instance:
+    name: "public-compute-instance"
+    key_name: "ansibleKey"
+    instance_type: t2.micro
+    security_group: default
+    region: us-east-1
+    aws_access_key: "{{ aws_access_key }}"
+    aws_secret_key: "{{ aws_secret_key }}"
+    count: 3
+    network_interfaces:
+      - assign_public_ip: true
+    image_id: ami-0bbdd8c17ed981ef9
+    tags:
+      Environment: demo-server
