@@ -1,15 +1,20 @@
 - name: start an instance with a public IP address
   amazon.aws.ec2_instance:
-    name: "public-compute-instance"
+    name: "{{ item.name }}"
     key_name: "ansibleKey"
-    instance_type: t2.micro
+    instance_type: "{{ item.instance_type }}"
     security_group: default
     region: us-east-1
     aws_access_key: "{{ aws_access_key }}"
     aws_secret_key: "{{ aws_secret_key }}"
-    count: 3
     network_interfaces:
       - assign_public_ip: true
-    image_id: ami-0bbdd8c17ed981ef9
+    image_id: "{{ item.ami_id }}"
     tags:
-      Environment: demo-server
+      Environment: "{{ item.name }}"
+
+  loop:
+    - { ami_id: "ami-052064a798f08f0d3", name: "public-compute-instance-one", instance_type: "t2.micro" }
+    - { ami_id: "ami-0bbdd8c17ed981ef9", name: "public-compute-instance-two", instance_type: "t2.micro" }
+    - { ami_id: "ami-0bbdd8c17ed981ef9", name: "public-compute-instance-three", instance_type: "t2.micro" }
+
